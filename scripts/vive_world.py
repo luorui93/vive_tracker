@@ -7,6 +7,7 @@ import time
 import sys
 import tf
 
+#generate vive_world from map frame 
 def vive_world():
     rospy.init_node('vive_tracker_frame')
     listener = tf.TransformListener()

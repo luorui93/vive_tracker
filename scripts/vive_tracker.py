@@ -2,6 +2,7 @@
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, PoseWithCovarianceStamped
 import rospy
+import rospkg
 from std_msgs.msg import String
 import triad_openvr
 import time
@@ -12,6 +13,7 @@ from tf.transformations import quaternion_multiply
 import numpy as np
 import math
 import pdb
+import yaml
 
 def vive_tracker():
     rospy.init_node('vive_tracker_frame')
@@ -20,6 +22,11 @@ def vive_tracker():
     listener = tf.TransformListener()
     rate = rospy.Rate(30) # 10hz]
     deviceCount = 0
+    rospack = rospkg.RosPack()
+    cfg_path = rospack.get_path('vive_tracker')+'/config/accessory.yaml'
+    with open(cfg_path, 'r') as cfg:
+      #read left, right hand tracker config
+      hand_cfg = yaml.load(cfg)['tracker']
 
     try:
       v = triad_openvr.triad_openvr()
@@ -66,7 +73,10 @@ def vive_tracker():
             if 'Null' in v.devices[deviceName].get_serial():
               del v.devices[deviceName]
               break
-            publish_name_str = v.devices[deviceName].get_serial().replace("-","_")
+            if v.devices[deviceName].get_serial() in hand_cfg:
+              publish_name_str = hand_cfg[v.devices[deviceName].get_serial()]
+            else:
+              publish_name_str = v.devices[deviceName].get_serial().replace("-","_")
             # Broadcast the TF as a quaternion
             [x, y, z, qx, qy, qz, qw] = v.devices[deviceName].get_pose_quaternion()
             time = rospy.Time.now()
