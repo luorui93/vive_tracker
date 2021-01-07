@@ -104,7 +104,7 @@ def vive_tracker():
             msg = PoseStamped()
             msg.header.stamp = time
             msg.header.frame_id = "vive_world"
-            msg.pose.pose = Pose(Point(x,y,z), Quaternion(qx, qy, qz, qw))
+            msg.pose = Pose(Point(x,y,z), Quaternion(qx, qy, qz, qw))
             publisher[deviceName].publish(msg)
             # publisher[deviceName].publish('  X: ' + str(x) + '  Y: ' + str(y) + '  Z: ' + str(z) + '  Pitch: ' + str(pitch) + '  Roll: ' + str(roll) + '  Yaw: ' + str(yaw))
 
