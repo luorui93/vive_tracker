@@ -47,9 +47,9 @@ SteamVR requires >4GB disk space
 
 `sudo ln -s /lib/x86_64-linux-gnu/libudev.so.1 /lib/x86_64-linux-gnu/libudev.so.0`
 
-5. Install pyopenvr
+5. Install pyopenvr (version<1.4)
 
-`sudo pip install -U pip openvr`
+`pip install --user 'openvr<1.4'`
 
 7. Disable the headset requirement and enable a null (simulated) headset:
 

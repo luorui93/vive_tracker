@@ -87,6 +87,10 @@ def vive_tracker():
             if "LHR" in v.devices[deviceName].get_serial():
                 [qx, qy, qz, qw] = tf.transformations.quaternion_multiply([qx, qy, qz, qw], tf.transformations.quaternion_from_euler(math.pi, 0.0, -math.pi/2.0))
 
+            # Rotate Vive Base axis to match the real scenario
+            if "LHB" in v.devices[deviceName].get_serial():
+                [qx, qy, qz, qw] = tf.transformations.quaternion_multiply([qx, qy, qz, qw], tf.transformations.quaternion_from_euler(-math.pi/2, math.pi/2, 0.0))
+
             broadcaster[deviceName].sendTransform((x,y,z),
                             (qx,qy,qz,qw),
                             time,
@@ -95,7 +99,7 @@ def vive_tracker():
 
             # Publish a topic as euler angles
             [x,y,z,roll,pitch,yaw] = v.devices[deviceName].get_pose_euler()
-            y_rot = math.radians(pitch)
+            # print (deviceName+': '+str([x,y,z,roll,pitch,yaw]))
 
             if deviceName not in publisher:
                 publisher[deviceName] = rospy.Publisher(publish_name_str, PoseStamped, queue_size=10)
