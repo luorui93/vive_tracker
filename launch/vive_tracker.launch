@@ -2,7 +2,7 @@
    <arg name="rviz" default="false"/>
    <group ns="vive"> 
       <!-- <node pkg="tf" type="static_transform_publisher" name="vive_world_tf_publisher" args="-1.47 1.16 0.0 -2.35 0.0 1.57 map vive_world 100" /> -->
-      <node pkg="tf" type="static_transform_publisher" name="vive_world_tf_publisher" args="-0.4 0.0 -1.6 0.15 -0.69 -0.68 -0.12 vive_world map 100" />
+      <node pkg="tf" type="static_transform_publisher" name="vive_world_tf_publisher" args="-0.417 -0.03 -1.338 0.25 -0.67 -0.66 -0.23 vive_world map 100" />
       <!-- <node pkg="tf" type="static_transform_publisher" name="work_center_tf_publisher" args="0.0 0.0 0.0 0.52 0.0 0.0 map work_center 100" /> -->
 
       <!-- <node pkg="vive_tracker" name="vive_world" type="vive_world.py" output="screen"/> -->
