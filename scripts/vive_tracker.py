@@ -14,6 +14,7 @@ import numpy as np
 import math
 import pdb
 import yaml
+import future
 
 def vive_tracker():
     rospy.init_node('vive_tracker_frame')
@@ -39,7 +40,7 @@ def vive_tracker():
       else:
         template = "An exception of type {0} occurred. Arguments:\n{1!r}"
         message = template.format(type(ex).__name__, ex.args)
-        print message
+        print(message)
       #print(ex.args)
       quit()
 

@@ -1,8 +1,6 @@
-[![Link to a video of this project in action.](https://img.youtube.com/vi/fvbSUXGViSY/0.jpg)](https://youtu.be/fvbSUXGViSY)
+This ROS Node publishes pose data from HTC Vive Tracker (Tested on Ubuntu 18.04 + ROS Melodic and Ubuntu 20.04 + ROS Noetic)
 
-This ROS Indigo Node publishes pose data from HTC Vive Tracker Ubuntu 14.04. 
-
-## Note: This depends on SteamVR on Ubuntu. Be advised that SteamVR is not fully supported on Ubuntu and may not install properly with your version of Ubuntu/graphics drivers/hardware. I recommend you try to get SteamVR installed on your computer before considering this node for your project. 
+Forked and modified from on https://github.com/moon-wreckers/vive_tracker
 
 # Prerequisites
 
@@ -16,19 +14,14 @@ SteamVR requires >4GB disk space
 # Installation Instructions
 1. [Install the latest VulkanSDK from here.](https://vulkan.lunarg.com/sdk/home#linux)
    
-      1. Download the latest VulkanSDK .run file, and run it in a turminal `chmod u+x ./vulkansdk* && ./vulkansdk*`
-      
-      2. Enter the directory and install to your system `cd VulkanSDK/1.* && sudo ./install/install_to_sys`
-      
-      3. Add this directory to your system environment `source /absolute/path/to/VulkanSDK/setup-env.sh >> ~/.bashrc`
-      
-      4. `source ~/.bashrc`
+      1. Download the latest VulkanSDK tarball file vulkansdk-linux-x86_64-xxx.tar.gz 
+      2. Decompress the file and run the `vulkansdk` file in the folder
 
 
 2. Install Steam from http://store.steampowered.com/
 
-      1. Install dependencies for OpenVR. `sudo apt-get install libsdl2-dev libudev-dev libssl-dev zlib1g-dev python-pip`
-   
+      1. `sudo apt install steam`
+
       2. Open steam with `steam` command, or through the Ubuntu menu. Make a Steam account & Log in.
   
       3. Enable the Steam beta through the Steam Menu -> Settings -> Account -> Beta Participation. [See the video here to see how to enable the beta.](https://www.youtube.com/watch?v=7AFUcj3HpvE)
@@ -39,44 +32,45 @@ SteamVR requires >4GB disk space
 
    1. Click Library
 
-   1. Click VR
+   2. Click VR
 
-   1. On the left you should now see SteamVR. Select it and click the the blue Install button.
+   3. On the left you should now see SteamVR. Select it and click the the blue Install button.
 
-1. Make a Symbolic Link from libudev.so.0 to libudev.so.1 for SteamVR to use. 
+   4. Make a Symbolic Link from libudev.so.0 to libudev.so.1 for SteamVR to use.
 
-`sudo ln -s /lib/x86_64-linux-gnu/libudev.so.1 /lib/x86_64-linux-gnu/libudev.so.0`
+       `sudo ln -s /lib/x86_64-linux-gnu/libudev.so.1 /lib/x86_64-linux-gnu/libudev.so.0`
 
-5. Install pyopenvr (version<1.4)
+3. Install pyopenvr 
 
-`pip install --user 'openvr<1.4'`
+   - For Ubuntu 18.04 (ROS Melodic), install pyopenvr (version<1.4) `pip install --user 'openvr<1.4'`. Because the default python for ROS Melodic is python2, but pyopenvr after 1.4 doesn't have python 2 release anymore.
+   - For Ubuntu 20.04 (ROS Noetic), install pyopenvr by `pip install openvr` directly.
 
-7. Disable the headset requirement and enable a null (simulated) headset:
 
-`gedit ~/.steam/steam/steamapps/common/SteamVR/resources/settings/default.vrsettings`
+4. Disable the headset requirement and enable a null (simulated) headset :
+  [Source](https://www.reddit.com/r/Vive/comments/4uo053/how_to_use_steamvr_tracked_devices_without_a_hmd/) 
 
-   1. Change the third line from `"requireHmd" : true,` to `"requireHmd" : false,`
-
-   2. Add `"activateMultipleDrivers"` : true, and add the line `"forcedDriver": "null"` beneath it.
+   1. Open file
    
-   3. Open `default.vrsettings`
+      ```gedit ~/.steam/steam/steamapps/common/SteamVR/resources/settings/default.vrsettings```
 
-`gedit ~/.steam/steam/steamapps/common/SteamVR/drivers/null/resources/settings/default.vrsettings`
+   2. Change the third line from `"requireHmd" : true,` to `"requireHmd" : false,`
 
-   1. Set `enable` (line 3) to `true` in null driver to enable it.
+   3. Also change `"activateMultipleDrivers" : true`, and the line `"forcedDriver": "null"`. save and exit.
+   
+   4. Open `default.vrsettings` by 
+   
+      ```gedit ~/.steam/steam/steamapps/common/SteamVR/drivers/null/resources/settings/default.vrsettings```
 
-  [Source](https://www.reddit.com/r/Vive/comments/6uo053/how_to_use_steamvr_tracked_devices_without_a_hmd/) 
+   5. Set `enable` (line 3) to `true` in null driver to enable it.
+
   
-8. Install this project in your catkin workspace.
+5. Build package.
 
 ```
-cd ~/catkin_ws/src/
-git clone https://github.com/moon-wreckers/vive_tracker.git
-cd ~/catkin_ws
-catkin_make
+cd ~/workspace/src/
+git clone https://github.com/luorui93/vive_tracker.git
+catkin build
 ```
-
-9. 
 
 # Usage
 1. Start SteamVR from the Steam Library (If you encounter `VRClientDLLNotFound`, make sure all of the dependencies are installed properly, especially VulkanSDK, and delete and recreate the symbolic link described above).
